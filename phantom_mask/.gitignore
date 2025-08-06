@@ -41,3 +41,6 @@ build/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+#Java
+src/main/resources/application.properties
