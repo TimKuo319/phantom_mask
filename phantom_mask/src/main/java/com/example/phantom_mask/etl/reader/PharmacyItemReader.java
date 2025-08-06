@@ -18,7 +18,7 @@ public class PharmacyItemReader implements ItemReader<Pharmacy> {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             File jsonFile = Paths.get(filePath).toFile();
-            List<Pharmacy> pharmacies = objectMapper.readValue(jsonFile, new TypeReference<List<Pharmacy>>() {});
+            List<Pharmacy> pharmacies = objectMapper.readValue(jsonFile, new TypeReference<>() {});
             this.iterator = pharmacies.iterator();
         } catch (Exception e) {
             throw new RuntimeException("Failed to load JSON file: " + filePath, e);

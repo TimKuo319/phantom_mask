@@ -1,10 +1,15 @@
 package com.example.phantom_mask.etl.config;
 
 import com.example.phantom_mask.etl.model.ProcessedPharmacy;
+import com.example.phantom_mask.etl.model.ProcessedUser;
 import com.example.phantom_mask.etl.processor.PharmacyProcessor;
+import com.example.phantom_mask.etl.processor.UserProcessor;
 import com.example.phantom_mask.etl.reader.PharmacyItemReader;
+import com.example.phantom_mask.etl.reader.UserItemReader;
 import com.example.phantom_mask.etl.writer.PharmacyWriter;
+import com.example.phantom_mask.etl.writer.UserWriter;
 import com.example.phantom_mask.model.Pharmacy;
+import com.example.phantom_mask.model.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -28,9 +33,16 @@ public class BatchConfig {
     @Value("${etl.pharmacy.file}")
     private String pharmacyJsonPath;
 
+    @Value("${etl.user.file}")
+    private String userJsonPath;
+
     @Bean
     public PharmacyItemReader pharmacyItemReader() {
         return new PharmacyItemReader(pharmacyJsonPath);
+    }
+
+    public UserItemReader userItemReader() {
+        return new UserItemReader(userJsonPath);
     }
 
     @Bean
@@ -39,8 +51,18 @@ public class BatchConfig {
     }
 
     @Bean
+    public UserProcessor userProcessor() {
+        return new UserProcessor();
+    }
+
+    @Bean
     public PharmacyWriter pharmacyItemWriter(NamedParameterJdbcTemplate jdbcTemplate) {
         return new PharmacyWriter(jdbcTemplate);
+    }
+
+    @Bean
+    public UserWriter userItemWriter(NamedParameterJdbcTemplate jdbcTemplate) {
+        return new UserWriter(jdbcTemplate);
     }
 
     @Bean
@@ -55,9 +77,20 @@ public class BatchConfig {
     }
 
     @Bean
-    public Job etlJob(JobRepository jobRepository, Step pharmacyStep) {
+    public Step userStep(JobRepository repo, PlatformTransactionManager tx) {
+        return new StepBuilder("userStep", repo)
+            .<User, ProcessedUser>chunk(10, tx)
+            .reader(userItemReader())
+            .processor(userProcessor())
+            .writer(userItemWriter(null))
+            .build();
+    }
+
+    @Bean
+    public Job etlJob(JobRepository jobRepository, Step pharmacyStep, Step userStep) {
         return new JobBuilder("etlJob", jobRepository)
             .start(pharmacyStep)
+            .next(userStep)
             .build();
     }
 }
