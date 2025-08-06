@@ -1,6 +1,6 @@
 package com.example.phantom_mask.etl.reader;
 
-import com.example.phantom_mask.model.Pharmacy;
+import com.example.phantom_mask.etl.model.Pharmacy;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.batch.item.ItemReader;

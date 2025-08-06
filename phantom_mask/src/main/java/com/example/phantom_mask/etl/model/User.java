@@ -1,4 +1,4 @@
-package com.example.phantom_mask.model;
+package com.example.phantom_mask.etl.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

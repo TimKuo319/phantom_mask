@@ -1,7 +1,5 @@
 package com.example.phantom_mask.etl.model;
 
-import com.example.phantom_mask.model.OpeningHour;
-import com.example.phantom_mask.model.Pharmacy;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

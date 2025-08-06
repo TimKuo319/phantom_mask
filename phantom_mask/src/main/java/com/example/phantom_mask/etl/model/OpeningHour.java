@@ -1,8 +1,7 @@
-package com.example.phantom_mask.model;
+package com.example.phantom_mask.etl.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 
 import java.time.LocalTime;
 

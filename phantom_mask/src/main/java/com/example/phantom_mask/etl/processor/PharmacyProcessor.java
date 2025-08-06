@@ -1,8 +1,8 @@
 package com.example.phantom_mask.etl.processor;
 
 import com.example.phantom_mask.etl.model.ProcessedPharmacy;
-import com.example.phantom_mask.model.OpeningHour;
-import com.example.phantom_mask.model.Pharmacy;
+import com.example.phantom_mask.etl.model.OpeningHour;
+import com.example.phantom_mask.etl.model.Pharmacy;
 import com.example.phantom_mask.util.OpeningHourParser;
 import org.springframework.batch.item.ItemProcessor;
 

@@ -1,7 +1,7 @@
 package com.example.phantom_mask.etl.processor;
 
 import com.example.phantom_mask.etl.model.ProcessedUser;
-import com.example.phantom_mask.model.User;
+import com.example.phantom_mask.etl.model.User;
 import org.springframework.batch.item.ItemProcessor;
 
 public class UserProcessor implements ItemProcessor<User, ProcessedUser> {

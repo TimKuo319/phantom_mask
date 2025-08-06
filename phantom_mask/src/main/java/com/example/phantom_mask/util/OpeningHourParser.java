@@ -1,7 +1,7 @@
 package com.example.phantom_mask.util;
 
 
-import com.example.phantom_mask.model.OpeningHour;
+import com.example.phantom_mask.etl.model.OpeningHour;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

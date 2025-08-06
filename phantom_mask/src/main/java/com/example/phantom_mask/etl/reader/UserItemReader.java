@@ -1,6 +1,6 @@
 package com.example.phantom_mask.etl.reader;
 
-import com.example.phantom_mask.model.User;
+import com.example.phantom_mask.etl.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

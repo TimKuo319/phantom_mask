@@ -1,16 +1,15 @@
 package com.example.phantom_mask.etl.writer;
 
 import com.example.phantom_mask.etl.model.ProcessedPharmacy;
-import com.example.phantom_mask.model.Mask;
-import com.example.phantom_mask.model.OpeningHour;
-import com.example.phantom_mask.model.Pharmacy;
+import com.example.phantom_mask.etl.model.Mask;
+import com.example.phantom_mask.etl.model.OpeningHour;
+import com.example.phantom_mask.etl.model.Pharmacy;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class PharmacyWriter implements ItemWriter<ProcessedPharmacy> {
 

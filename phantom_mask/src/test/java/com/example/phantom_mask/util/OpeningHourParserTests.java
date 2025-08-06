@@ -1,6 +1,6 @@
 package com.example.phantom_mask.util;
 
-import com.example.phantom_mask.model.OpeningHour;
+import com.example.phantom_mask.etl.model.OpeningHour;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;

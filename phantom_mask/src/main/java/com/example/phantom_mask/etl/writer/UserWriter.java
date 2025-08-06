@@ -2,8 +2,8 @@ package com.example.phantom_mask.etl.writer;
 
 
 import com.example.phantom_mask.etl.model.ProcessedUser;
-import com.example.phantom_mask.model.Transaction;
-import com.example.phantom_mask.model.User;
+import com.example.phantom_mask.etl.model.Transaction;
+import com.example.phantom_mask.etl.model.User;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
