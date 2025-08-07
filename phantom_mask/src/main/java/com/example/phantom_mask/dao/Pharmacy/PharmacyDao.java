@@ -1,10 +1,9 @@
-package com.example.phantom_mask.dao;
+package com.example.phantom_mask.dao.Pharmacy;
 
 
 import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;

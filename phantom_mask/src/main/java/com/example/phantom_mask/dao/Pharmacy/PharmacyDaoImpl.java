@@ -1,4 +1,4 @@
-package com.example.phantom_mask.dao;
+package com.example.phantom_mask.dao.Pharmacy;
 
 import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Log4j2
 @Repository
-public class PharmacyDaoImpl implements PharmacyDao{
+public class PharmacyDaoImpl implements PharmacyDao {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
