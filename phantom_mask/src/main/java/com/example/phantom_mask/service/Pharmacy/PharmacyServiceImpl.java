@@ -1,12 +1,14 @@
 package com.example.phantom_mask.service.Pharmacy;
 
 import com.example.phantom_mask.dao.PharmacyDao;
+import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +29,7 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     private static final Set<String> ALLOWED_SORT_FIELDS = Set.of("name", "price");
     private static final Set<String> ALLOWED_SORT_ORDERS = Set.of("asc", "desc");
+    private static final Set<String> ALLOWED_COMPARISONS = Set.of("more", "less");
 
     public PharmacyServiceImpl(PharmacyDao pharmacyDao) {
         this.pharmacyDao = pharmacyDao;
@@ -70,14 +73,23 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     public List<MaskDto> getMasksByPharmacyId(int pharmacyId, String sortBy, String order) {
-
+        // Validate sortBy and order to prevent malicious input
         String sanitizedSortBy = ALLOWED_SORT_FIELDS.contains(sortBy.toLowerCase()) ? sortBy.toLowerCase() : "name";
-
         String sanitizedOrder = ALLOWED_SORT_ORDERS.contains(order.toLowerCase()) ? order.toLowerCase() : "asc";
 
         return pharmacyDao.getMasksByPharmacyId(pharmacyId, sanitizedSortBy, sanitizedOrder);
     }
 
+    public List<FilteredPharmacyDto> getFilteredPharmacies(BigDecimal minPrice, BigDecimal maxPrice, int threshold, String comparison) {
+        // Validate comparison to prevent malicious input
+        String sanitizedComparison = ALLOWED_COMPARISONS.contains(comparison.toLowerCase()) ? comparison.toLowerCase() : "more";
+        String operator = sanitizedComparison.equals("more") ? ">" : "<";
+        if(maxPrice == null) {
+            maxPrice = BigDecimal.valueOf(Double.MAX_VALUE);
+        }
+
+        return pharmacyDao.getFilteredPharmacies(minPrice, maxPrice, threshold, operator);
+    }
 
     private Duration calculateClosingTime(LocalTime queryTime, OpenPharmacyDto dto) {
         LocalTime startTime = dto.getStartTime();

@@ -1,11 +1,13 @@
 package com.example.phantom_mask.dao;
 
+import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.List;
@@ -73,6 +75,33 @@ public class PharmacyDaoImpl implements PharmacyDao{
             dto.setId(rs.getInt("id"));
             dto.setName(rs.getString("name"));
             dto.setPrice(rs.getBigDecimal("price"));
+            return dto;
+        });
+    }
+
+    @Override
+    public List<FilteredPharmacyDto> getFilteredPharmacies(BigDecimal minPrice, BigDecimal maxPrice, int threshold, String operator) {
+        String sql = String.format("""
+        SELECT s.id, s.name, s.cash_balance, COUNT(m.id) as mask_count
+        FROM stores s
+        JOIN masks m ON s.id = m.store_id
+        WHERE m.price BETWEEN :minPrice AND :maxPrice
+        GROUP BY s.id
+        HAVING COUNT(m.id) %s :threshold
+    """, operator);
+
+        Map<String, Object> params = Map.of(
+            "minPrice", minPrice,
+            "maxPrice", maxPrice,
+            "threshold", threshold
+        );
+
+        return jdbcTemplate.query(sql, params, (rs, rowNum) -> {
+            FilteredPharmacyDto dto = new FilteredPharmacyDto();
+            dto.setId(rs.getInt("id"));
+            dto.setName(rs.getString("name"));
+            dto.setCashBalance(rs.getBigDecimal("cash_balance"));
+            dto.setMatchedMasksCount(rs.getInt("mask_count"));
             return dto;
         });
     }
