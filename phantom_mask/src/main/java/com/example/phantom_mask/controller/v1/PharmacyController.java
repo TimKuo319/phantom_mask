@@ -3,14 +3,12 @@ package com.example.phantom_mask.controller.v1;
 import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
-import com.example.phantom_mask.service.Pharmacy.PharmacyService;
+import com.example.phantom_mask.service.pharmacy.PharmacyService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;

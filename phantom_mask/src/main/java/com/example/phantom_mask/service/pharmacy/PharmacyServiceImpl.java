@@ -1,10 +1,9 @@
-package com.example.phantom_mask.service.Pharmacy;
+package com.example.phantom_mask.service.pharmacy;
 
 import com.example.phantom_mask.dao.PharmacyDao;
 import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 

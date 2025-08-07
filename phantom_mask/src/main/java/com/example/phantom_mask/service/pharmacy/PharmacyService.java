@@ -1,11 +1,10 @@
-package com.example.phantom_mask.service.Pharmacy;
+package com.example.phantom_mask.service.pharmacy;
 
 import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
 import java.util.List;
 
 public interface PharmacyService {
