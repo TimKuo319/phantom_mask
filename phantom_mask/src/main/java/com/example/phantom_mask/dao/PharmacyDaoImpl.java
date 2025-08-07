@@ -1,6 +1,8 @@
 package com.example.phantom_mask.dao;
 
+import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
+@Log4j2
 @Repository
 public class PharmacyDaoImpl implements PharmacyDao{
 
@@ -45,6 +48,31 @@ public class PharmacyDaoImpl implements PharmacyDao{
             dto.setStartTime(rs.getTime("start_time").toLocalTime());
             dto.setEndTime(rs.getTime("end_time").toLocalTime());
             dto.setCrossNight(rs.getBoolean("is_cross_night"));
+            return dto;
+        });
+    }
+
+    @Override
+    public List<MaskDto> getMasksByPharmacyId(int pharmacyId, String sortBy, String order) {
+        String sql = String.format("""
+            SELECT m.id, m.name, m.price
+            FROM masks m
+            JOIN stores s ON m.store_id = s.id
+            WHERE s.id = :pharmacyId
+            ORDER BY %s %s
+        """, sortBy, order);
+
+        Map<String, Object> params = Map.of(
+            "pharmacyId", pharmacyId
+        );
+
+        log.info(sortBy);
+
+        return jdbcTemplate.query(sql, params, (rs, rowNum) -> {
+            MaskDto dto = new MaskDto();
+            dto.setId(rs.getInt("id"));
+            dto.setName(rs.getString("name"));
+            dto.setPrice(rs.getBigDecimal("price"));
             return dto;
         });
     }
