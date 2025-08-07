@@ -14,5 +14,6 @@ import java.util.List;
 public class ProcessedPharmacy {
     private Pharmacy pharmacy;
     private List<OpeningHour> openingHours;
+    private List<ProcessedMask> masks;
 
 }

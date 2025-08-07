@@ -24,11 +24,21 @@ public class UserWriter implements ItemWriter<ProcessedUser> {
         for (ProcessedUser pu : chunk) {
             User user = pu.getUser();
 
-            String insUser = "INSERT INTO users (name, cash_balance) VALUES (:name, :cb)";
+            String insUser = """
+                INSERT INTO users (name, cash_balance)
+                VALUES (:name, :cb)
+                ON DUPLICATE KEY UPDATE
+                    cash_balance = VALUES(cash_balance)
+                """;
             jdbc.update(insUser, new MapSqlParameterSource()
                 .addValue("name", user.getName())
                 .addValue("cb", user.getCashBalance()));
-            Integer userId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", new HashMap<>(), Integer.class);
+
+            Integer userId = jdbc.queryForObject(
+                "SELECT id FROM users WHERE name = :name",
+                new MapSqlParameterSource("name", user.getName()),
+                Integer.class
+            );
 
             for (Transaction tx : user.getTransactions()) {
                 Integer storeId = jdbc.queryForObject(
@@ -43,8 +53,12 @@ public class UserWriter implements ItemWriter<ProcessedUser> {
                         .addValue("mname", tx.getMaskName()),
                     Integer.class);
 
-                String insTx = "INSERT INTO transactions (user_id, store_id, mask_id, transaction_amount, transaction_date) " +
-                    "VALUES (:u, :s, :m, :amt, :dt)";
+                String insTx = """
+                    INSERT INTO transactions (user_id, store_id, mask_id, transaction_amount, transaction_date)
+                    VALUES (:u, :s, :m, :amt, :dt)
+                    ON DUPLICATE KEY UPDATE
+                        transaction_amount = VALUES(transaction_amount)
+                    """;
                 jdbc.update(insTx, new MapSqlParameterSource()
                     .addValue("u", userId)
                     .addValue("s", storeId)
