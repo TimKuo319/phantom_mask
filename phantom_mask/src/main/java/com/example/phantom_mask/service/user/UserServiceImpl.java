@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService{
 
         } catch (DateTimeParseException e) {
             log.error("Invalid date format: {}", e.getMessage());
-            throw new IllegalArgumentException("Invalid date format. Please use ISO 8601 format (e.g., 2025-01-01T00:00:00).", e);
+            throw new IllegalArgumentException("Invalid date format. Please use ISO 8601 format (e.g., 2025-01-01).", e);
         }
     }
 }
