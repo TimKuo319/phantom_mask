@@ -21,6 +21,14 @@ public class AnalyticsController {
         this.analyticsService = analyticsService;
     }
 
+
+    /**
+     * Get mask transaction statistics for a given date range.
+     *
+     * @param startDate The start date in the format "yyyy-MM-dd".
+     * @param endDate The end date in the format "yyyy-MM-dd".
+     * @return A ResponseEntity containing the mask transaction statistics or an error message.
+     */
     @GetMapping("/masks/transaction-stats")
     public ResponseEntity<?> getMaskTransactionStats(
         @RequestParam("startDate") String startDate,
