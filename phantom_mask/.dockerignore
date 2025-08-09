@@ -1,0 +1,35 @@
+target/
+.git/
+.gitignore
+README.md
+*.md
+
+# mvn
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+docker/
+
+# Log
+logs/
+*.log
+
+# tmp
+tmp/
+temp/

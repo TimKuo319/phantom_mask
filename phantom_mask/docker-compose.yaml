@@ -1,0 +1,59 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: phantom_mask_mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: phantom_mask_root
+        MYSQL_DATABASE: phantom_mask
+        MYSQL_USER: user
+        MYSQL_PASSWORD: phantom_mask_user
+
+    ports:
+        - "3306:3306"
+    volumes:
+        - mysql_data:/var/lib/mysql
+    networks:
+        - phantom_mask_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: phantom_mask_app
+    environment:
+      # Database connection settings
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/phantom_mask?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=phantom_mask_user
+      - SPRING_DATA_SOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+
+       # Flyway settings
+      - SPRING_FLYWAY_ENABLED=true
+      - SPRING_FLYWAY_LOCATIONS=classpath:db/migration
+      - SPRING_FLYWAY_BASELINE_ON_MIGRATE=true
+      - SPRING_FLYWAY_VALIDATE_ON_MIGRATE=true
+
+      # Batch settings
+      - SPRING_BATCH_JDBC_INITIALIZE_SCHEMA=always
+
+      # ETL JSON file paths
+      - ETL_PHARMACY_FILE=/app/data/pharmacies.json
+      - ETL_USER_FILE=/app/data/users.json
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ../data:/app/data
+    depends_on:
+      - mysql
+
+    networks:
+      - phantom_mask_network
+
+networks:
+    phantom_mask_network:
+        driver: bridge
+
+volumes:
+  mysql_data:
