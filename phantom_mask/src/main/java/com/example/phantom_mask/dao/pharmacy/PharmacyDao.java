@@ -1,4 +1,4 @@
-package com.example.phantom_mask.dao.Pharmacy;
+package com.example.phantom_mask.dao.pharmacy;
 
 
 import com.example.phantom_mask.dto.FilteredPharmacyDto;

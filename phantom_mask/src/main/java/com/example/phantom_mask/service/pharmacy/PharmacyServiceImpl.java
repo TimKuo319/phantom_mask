@@ -1,6 +1,6 @@
 package com.example.phantom_mask.service.pharmacy;
 
-import com.example.phantom_mask.dao.Pharmacy.PharmacyDao;
+import com.example.phantom_mask.dao.pharmacy.PharmacyDao;
 import com.example.phantom_mask.dto.FilteredPharmacyDto;
 import com.example.phantom_mask.dto.MaskDto;
 import com.example.phantom_mask.dto.OpenPharmacyDto;
