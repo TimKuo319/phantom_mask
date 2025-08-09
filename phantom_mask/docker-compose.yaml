@@ -14,6 +14,12 @@ services:
         - mysql_data:/var/lib/mysql
     networks:
         - phantom_mask_network
+    healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-pphantom_mask_user"]
+        interval: 5s
+        timeout: 3s
+        retries: 6
+        start_period: 15s
 
   app:
     build:
@@ -46,7 +52,9 @@ services:
     volumes:
       - ../data:/app/data
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
+
 
     networks:
       - phantom_mask_network
