@@ -34,9 +34,10 @@ The documentation includes:
 The project includes Spring Batch to run ETL process to import the raw JSON data into the database. ETL process runs automatically on application startup
 
 
-#### Using Docker Compose (Recommended)
+#### Using Docker Compose 
 
 ```bash
+
 # Start the application with database
 docker-compose up -d
 
@@ -47,8 +48,33 @@ The ETL process will:
 1. Parse pharmacy opening hours into structured format
 2. Extract mask quantities from product names
 3. Create relational database records
-4. Handle data cleaning and transformation
-5. Import user transaction histories
+4. Import these data into database
+
+### A.4. API Server Testing Instructions
+
+To test the API server locally, follow these steps:
+
+#### Prerequisites
+- Git
+- Docker and Docker Compose
+
+#### Setup Steps
+
+  ```bash
+
+# clone repository to local
+  git clone https://github.com/TimKuo319/phantom_mask.git
+
+# change directory to project directory
+  cd phantom_mask
+
+# start application using Docker compose 
+docker compose up -d 
+  ```
+
+As for API usage, you can reference API docs in [doc/api-documentation.md](doc/api-documentation.md).
+
+
 
 ## B. Bonus Information
 
@@ -58,8 +84,6 @@ I implemented unit tests for utility classes including:
 - `OpeningHourParserTests` - Tests for parsing various opening hour formats
 - `QuantityParserTests` - Tests for extracting mask quantities from product names
 
-You can run the test suite using:
-
 ### B.2. Dockerized
 
 The project is containerized with multi-stage Docker builds:
@@ -68,6 +92,8 @@ The project is containerized with multi-stage Docker builds:
 - **docker-compose.yml**: Complete setup with MySQL database and application
 - **Health checks**: Database health monitoring before application startup
 - **Volume mounting**: Automatic data file mounting for ETL process
+
+Dockerfile and docker-compose.yaml is under directory `/phantom_mask`
 
 Build and run commands:
 
