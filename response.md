@@ -1,73 +1,110 @@
 # Response
-> The Current content is an **example template**; please edit it to fit your style and content.
-## A. Required Information
-### A.1. Requirement Completion Rate
-- [x] List all pharmacies open at a specific time and on a day of the week if requested.
-  - Implemented at xxx API.
-- [x] List all masks sold by a given pharmacy, sorted by mask name or price.
-  - Implemented at xxx API.
-- [x] List all pharmacies with more or less than x mask products within a price range.
-  - Implemented at xxx API.
-- [x] The top x users by total transaction amount of masks within a date range.
-  - Implemented at xxx API.
-- [x] The total number of masks and dollar value of transactions within a date range.
-  - Implemented at xxx API.
-- [x] Search for pharmacies or masks by name, ranked by relevance to the search term.
-  - Implemented at xxx API.
-- [x] Process a user purchases a mask from a pharmacy, and handle all relevant data changes in an atomic transaction.
-  - Implemented at xxx API.
-### A.2. API Document
-> Please describe how to use the API in the API documentation. You can edit by any format (e.g., Markdown or OpenAPI) or free tools (e.g., [hackMD](https://hackmd.io/), [postman](https://www.postman.com/), [google docs](https://docs.google.com/document/u/0/), or  [swagger](https://swagger.io/specification/)).
 
-Import [this](#api-document) json file to Postman.
+## A. Required Information
+
+### A.1. Requirement Completion Rate
+
+- [x] List all pharmacies open at a specific time and on a day of the week if requested.
+  - Implemented at `GET /api/1.0/pharmacy/open` API.
+- [x] List all masks sold by a given pharmacy, sorted by mask name or price.
+  - Implemented at `GET /api/1.0/pharmacy/{pharmacyId}/masks` API.
+- [x] List all pharmacies with more or less than x mask products within a price range.
+  - Implemented at `GET /api/1.0/pharmacy` API.
+- [x] The top x users by total transaction amount of masks within a date range.
+  - Implemented at `GET /api/1.0/user/top-users` API.
+- [x] The total number of masks and dollar value of transactions within a date range.
+  - Implemented at `GET /api/1.0/analytics/masks/transaction-stats` API.
+- [x] Search for pharmacies or masks by name, ranked by relevance to the search term.
+  - Implemented at `GET /api/1.0/search` API.
+- [x] Process a user purchases a mask from a pharmacy, and handle all relevant data changes in an atomic transaction.
+  - Implemented at `POST /api/1.0/purchase/masks` API.
+
+### A.2. API Document
+
+Please refer to the comprehensive API documentation at [doc/api-documentation.md](doc/api-documentation.md).
+
+The documentation includes:
+- Complete endpoint descriptions with parameters
+- Request/response examples in JSON format
+- Parameter tables with type and description information
+- Proper HTTP status codes
 
 ### A.3. Import Data Commands
-Please run these two script commands to migrate the data into the database.
+
+The project includes Spring Batch to run ETL process to import the raw JSON data into the database. ETL process runs automatically on application startup
+
+
+#### Using Docker Compose (Recommended)
 
 ```bash
-$ rake import_data:pharmacies[PATH_TO_FILE]
-$ rake import_data:users[PATH_TO_FILE]
+# Start the application with database
+docker-compose up -d
+
+# Data files are mounted from ../data directory to /app/data in the container
 ```
+
+The ETL process will:
+1. Parse pharmacy opening hours into structured format
+2. Extract mask quantities from product names
+3. Create relational database records
+4. Handle data cleaning and transformation
+5. Import user transaction histories
+
 ## B. Bonus Information
 
->  If you completed the bonus requirements, please fill in your task below.
 ### B.1. Test Coverage Report
 
-I wrote down the 20 unit tests for the APIs I built. Please check the test coverage report at [here](#test-coverage-report).
+I implemented unit tests for utility classes including:
+- `OpeningHourParserTests` - Tests for parsing various opening hour formats
+- `QuantityParserTests` - Tests for extracting mask quantities from product names
 
-You can run the test script by using the command below:
-
-```bash
-bundle exec rspec spec
-```
+You can run the test suite using:
 
 ### B.2. Dockerized
-Please check my Dockerfile / docker-compose.yml at [here](#dockerized).
 
-On the local machine, please follow the commands below to build it.
+The project is containerized with multi-stage Docker builds:
+
+- **Dockerfile**: Multi-stage build using Maven and Eclipse Temurin JRE
+- **docker-compose.yml**: Complete setup with MySQL database and application
+- **Health checks**: Database health monitoring before application startup
+- **Volume mounting**: Automatic data file mounting for ETL process
+
+Build and run commands:
 
 ```bash
-$ docker build --build-arg ENV=development -p 80:3000 -t my-project:1.0.0 .  
-$ docker-compose up -d
+# Build and start all services
+docker-compose up -d
 
-# go inside the container, run the migrate data command.
-$ docker exec -it my-project bash
-$ rake import_data:pharmacies[PATH_TO_FILE] 
-$ rake import_data:user[PATH_TO_FILE]
+# View application logs
+docker-compose logs -f app
+
+# Stop all services
+docker-compose down
 ```
 
-### B.3. Demo Site Url
-
-The demo site is ready on [my AWS demo site](#demo-site-url); you can try any APIs on this demo site.
+The containerized setup includes:
+- MySQL 8.0 database with persistent storage
+- Spring Boot application with proper dependency management
+- Automatic database schema migration with Flyway
+- Environment-specific configuration management
 
 ## C. Other Information
 
-### C.1. ERD
+### C.1. Architecture Overview
 
-My ERD [erd-link](#erd-link).
+The project follows a layered architecture pattern:
 
-### C.2. Technical Document
+- **Controller Layer**: REST API endpoints with proper HTTP status handling
+- **Service Layer**: Business logic implementation with input validation
+- **DAO Layer**: Data access using Spring JDBC with named parameters
 
-For frontend programmer reading, please check this [technical document](technical-document) to know how to operate those APIs.
+### C.2. Database Design
 
-- --
+MyERD ([KDAN-assignment](https://drawsql.app/teams/individual-117/diagrams/kdan))
+
+The database schema includes:
+- **stores**: Pharmacy information with cash balances
+- **opening_hours**: Structured opening hours with cross-night support
+- **masks**: Product catalog with pricing and quantities
+- **users**: Customer information and balances
+- **transactions**: Purchase history 
